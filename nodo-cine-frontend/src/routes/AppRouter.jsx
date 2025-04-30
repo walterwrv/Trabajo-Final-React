@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 // import RegisterPage from "../pages/Auth/RegisterPage";
-// import ProfileSelector from "../pages/Profile/ProfileSelector";
+import ProfileSelector from "../components/ProfileSelector";
 // import MovieCatalog from "../pages/Movies/MovieCatalog";
-import ProtectedRoute from "../components/ProtectedRoute";
+import PrivateRoute from "../components/PrivateRoute";
 
 export const AppRouter = () => (
 
@@ -12,11 +12,19 @@ export const AppRouter = () => (
         <Route path="/login" element={<Login />} />
         {/* <Route path="/register" element={<RegisterPage />} /> */}
 
-        <Route path="/" element={<ProtectedRoute />}>
+        
+        <Route
+          path="/seleccionar-perfil"
+          element={
+            <PrivateRoute>
+              <ProfileSelector />
+            </PrivateRoute>
+          }
+        />
           {/* <Route path="perfiles" element={<ProfileSelector />} /> */}
           {/* <Route path="catalogo" element={<MovieCatalog />} /> */}
           {/* <Route path="dashboard" element={<p>Dash</p>} /> */}
-        </Route>
+       
 
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>

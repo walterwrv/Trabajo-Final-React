@@ -27,7 +27,8 @@ export default function Login() {
     setError("");
     try {
       await login(data.email, data.password);
-      // navigate("/dashboard"); // redirige si el login fue exitoso
+      console.log('Login exitoso');
+      navigate("/seleccionar-perfil"); // redirige si el login fue exitoso
     } catch (err) {
       setError("Credenciales incorrectas o error del servidor");
     }

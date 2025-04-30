@@ -13,7 +13,9 @@ const ProfileSelector = () => {
         const res = await axios.get('http://localhost:5000/api/profiles/all', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setProfiles(res.data);
+        // console.log('Res-> ',res.data.profiles);
+        setProfiles(res.data.profiles);
+        
       } catch (error) {
         console.error('Error al obtener perfiles', error);
       }

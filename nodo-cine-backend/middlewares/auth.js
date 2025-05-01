@@ -5,12 +5,15 @@ const verifyToken = (req, res, next) => {
   // console.log('Authorization header:', req.headers.authorization);
 
   const bearerHeader = req.headers['authorization'];
+  
+  // console.log('bearerHeader:', bearerHeader.startsWith('Bearer '));
 
-  if (!bearerHeader || !bearerHeader.startsWith('Bearer ')) {
+  if (!bearerHeader) {
     return res.status(403).json({ message: 'Token no proporcionado o malformado' });
   }
 
-  const token = bearerHeader.split(' ')[1]; // Extrae solo el token
+  // const token = bearerHeader.split(' ')[0]; // Extrae solo el token
+  const token = bearerHeader;
 
   try {
     // console.log('JWT_SECRET:', process.env.JWT_SECRET);

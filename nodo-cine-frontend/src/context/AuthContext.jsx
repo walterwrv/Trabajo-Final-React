@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       if (!token) return setLoading(false);
       try {
         const res = await axios.get("http://localhost:5000/api/auth/user", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `${token}` },
         });
         setUser(res.data.user);
       } catch (err) {

@@ -2,10 +2,11 @@ import Movie from '../models/Movie.js';
 
 // Crear una película
 export const createMovie = async (req, res) => {
-  const { title, description, category, releaseDate, ageRating } = req.body;
+   
+    const { title, description, image, category, releaseDate, ageRating } = req.body;
 
   try {
-    const newMovie = new Movie({ title, description, category, releaseDate, ageRating });
+    const newMovie = new Movie({ title, description, image, category, releaseDate, ageRating });
     await newMovie.save();
     return res.status(201).json({ message: 'Película creada con éxito', movie: newMovie });
   } catch (error) {

@@ -9,6 +9,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: [true, 'La descripción de la película es obligatoria'],
   },
+  image: {
+    type: String,
+    required: [true, 'La imagen de la película es obligatoria'],
+  },
   category: {
     type: String,
     required: [true, 'La categoría de la película es obligatoria'],

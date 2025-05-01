@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import ProfileSelector from "../components/ProfileSelector";
 // import MovieCatalog from "../pages/Movies/MovieCatalog";
 import PrivateRoute from "../components/PrivateRoute";
+import Catalogo from "../components/Catalogo";
 
 export const AppRouter = () => (
 
@@ -21,6 +22,7 @@ export const AppRouter = () => (
             </PrivateRoute>
           }
         />
+        <Route path="/catalogo" element={<PrivateRoute><Catalogo /></PrivateRoute>} />
           {/* <Route path="perfiles" element={<ProfileSelector />} /> */}
           {/* <Route path="catalogo" element={<MovieCatalog />} /> */}
           {/* <Route path="dashboard" element={<p>Dash</p>} /> */}

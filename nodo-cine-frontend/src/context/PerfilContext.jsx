@@ -10,11 +10,6 @@ export const usePerfil = () => useContext(PerfilContext);
 export const PerfilProvider = ({ children }) => {
   const [perfilSeleccionado, setPerfilSeleccionado] = useState(null);
 
-  const seleccionarPerfil = (perfil) => {
-    setPerfilSeleccionado(perfil);
-    localStorage.setItem('perfilSeleccionado', JSON.stringify(perfil));
-  };
-
   const cargarPerfilDesdeLocalStorage = () => {
     const perfilGuardado = localStorage.getItem('perfilSeleccionado');
     if (perfilGuardado) {
@@ -22,13 +17,21 @@ export const PerfilProvider = ({ children }) => {
     }
   };
 
+   // Función para eliminar el perfil seleccionado
+   const eliminarPerfil = () => {
+    setPerfilSeleccionado(null);
+    localStorage.removeItem('perfilSeleccionado');
+  };
+
   // Cargar perfil cuando se monta
   useState(() => {
     cargarPerfilDesdeLocalStorage();
   }, []);
 
+
+
   return (
-    <PerfilContext.Provider value={{ perfilSeleccionado, seleccionarPerfil, setPerfilSeleccionado }}>
+    <PerfilContext.Provider value={{ perfilSeleccionado, setPerfilSeleccionado, eliminarPerfil }}>
       {children}
     </PerfilContext.Provider>
   );

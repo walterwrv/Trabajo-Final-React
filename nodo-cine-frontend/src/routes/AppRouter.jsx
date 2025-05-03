@@ -5,11 +5,18 @@ import ProfileSelector from "../components/ProfileSelector";
 // import MovieCatalog from "../pages/Movies/MovieCatalog";
 import PrivateRoute from "../components/PrivateRoute";
 import Catalogo from "../components/Catalogo";
+import PerfilAdmin from "../components/PerfilAdmin";
+import Navbar from "../components/Navbar";
+import CreatePerfil from "../components/CreatePerfil";
+import EditarPerfil from "../components/EditarPerfil";
+import Watchlist from "../components/Watchlist";
+
 
 export const AppRouter = () => (
 
    
       <Routes>
+        
         <Route path="/login" element={<Login />} />
         {/* <Route path="/register" element={<RegisterPage />} /> */}
 
@@ -18,13 +25,18 @@ export const AppRouter = () => (
           path="/seleccionar-perfil"
           element={
             <PrivateRoute>
+              <Navbar />
               <ProfileSelector />
             </PrivateRoute>
           }
         />
-        <Route path="/catalogo" element={<PrivateRoute><Catalogo /></PrivateRoute>} />
-          {/* <Route path="perfiles" element={<ProfileSelector />} /> */}
-          {/* <Route path="catalogo" element={<MovieCatalog />} /> */}
+        <Route path="/catalogo" element={<PrivateRoute><Navbar /><Catalogo /></PrivateRoute>} />
+        <Route path="/administrar-perfiles" element={<PrivateRoute><Navbar /><PerfilAdmin /></PrivateRoute>} />
+        <Route path="/crear-perfil" element={<PrivateRoute><Navbar /><CreatePerfil /></PrivateRoute>} />
+        <Route path="/editar-perfil/:id" element={<PrivateRoute><Navbar /><EditarPerfil /></PrivateRoute>} />
+        <Route path="/watchlist" element={<Watchlist />} />
+
+
           {/* <Route path="dashboard" element={<p>Dash</p>} /> */}
        
 

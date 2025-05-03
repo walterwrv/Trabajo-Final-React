@@ -3,6 +3,7 @@ import Movie from '../models/Movie.js';
 
 // Crear perfil
 export const createProfile = async (req, res) => {
+  console.log('Usuario autenticado:', req.user);
   try {
     const { name, ageCategory } = req.body;
 
@@ -11,16 +12,22 @@ export const createProfile = async (req, res) => {
       }
     const { userId } = req.user;
 
+    // Verifica si el usuario existe
+ 
     const newProfile = new Profile({
       name,
       ageCategory,
       userId: userId, // Asociar el perfil al usuario autenticado
     });
 
-    await newProfile.save();
+    
+  console.log('Nuevo perfil a guardar:', newProfile);
+  const savedProfile = await newProfile.save();
+  console.log('Perfil guardado:', savedProfile);
+  
     res.status(201).json({ message: 'Perfil creado exitosamente', profile: newProfile });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear perfil', error });
+    res.status(500).json({ message: 'Error al crear perfiiiiil', error });
   }
 };
 
@@ -109,4 +116,45 @@ export const addToWatchlist = async (req, res) => {
     return res.status(500).json({ message: 'Error al agregar película a la watchlist', error });
   }
 };
+
+export const getWatchlist = async (req, res) => {
+  const { profileId } = req.params;
+
+  try {
+    const profile = await Profile.findById(profileId).populate('watchlist');
+    if (!profile) return res.status(404).json({ message: 'Perfil no encontrado' });
+
+    res.status(200).json(profile.watchlist);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener la watchlist', error });
+  }
+};
+
+export const removeFromWatchlist = async (req, res) => {
+  try {
+    const { profileId, movieId } = req.body;
+
+    if (!profileId || !movieId) {
+      return res.status(400).json({ message: 'Faltan datos: profileId o movieId' });
+    }
+
+    const profile = await Profile.findById(profileId);
+    if (!profile) {
+      return res.status(404).json({ message: 'Perfil no encontrado' });
+    }
+
+    // Filtrar el movieId del array watchlist
+    profile.watchlist = profile.watchlist.filter(
+      (id) => id.toString() !== movieId
+    );
+
+    await profile.save();
+
+    res.status(200).json({ message: 'Película eliminada de la watchlist', watchlist: profile.watchlist });
+  } catch (error) {
+    console.error('Error al eliminar de la watchlist:', error);
+    res.status(500).json({ message: 'Error al eliminar de la watchlist', error });
+  }
+};
+
 

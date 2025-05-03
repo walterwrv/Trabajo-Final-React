@@ -4,6 +4,7 @@ import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import movieRoutes from './routes/movieRoutes.js';
 import externalRoutes from './routes/externalRoutes.js';
+import watchlistRoutes from './routes/watchlistRoutes.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/profiles', profileRoutes);  // Usamos las rutas de perfiles
 app.use('/api/movies', movieRoutes);  // Usamos las rutas de movies
+app.use('/api/watchlist', watchlistRoutes);  // Usamos las rutas de movies
 
 //Ruta externa
 app.use('/api/external', externalRoutes);

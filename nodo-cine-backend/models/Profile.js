@@ -8,7 +8,7 @@ const profileSchema = new mongoose.Schema(
     },
     ageCategory: {
       type: String,
-      enum: ['Adulto', 'Niño'], // Por ejemplo, puedes agregar más categorías según tus necesidades
+      enum: ['Adulto', 'Infantil'], // Por ejemplo, puedes agregar más categorías según tus necesidades
       required: true,
     },
     userId: {

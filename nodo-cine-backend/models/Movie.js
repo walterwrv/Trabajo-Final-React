@@ -19,7 +19,7 @@ const movieSchema = new mongoose.Schema({
   },
   releaseDate: {
     type: Date,
-    required: [true, 'La fecha de estreno es obligatoria'],
+    
   },
   ageRating: {
     type: String,

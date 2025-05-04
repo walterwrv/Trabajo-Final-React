@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
 
 
 const schema = Yup.object({
@@ -64,6 +64,12 @@ export default function Login() {
         <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
           Ingresar
         </button>
+        <p className="mt-4 text-sm text-center">
+          ¿No tenés una cuenta?{' '}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Registrate
+          </Link>
+        </p>
       </form>
     </div>
   );

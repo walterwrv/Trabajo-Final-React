@@ -2,11 +2,11 @@
 
 import express from 'express';
 import { searchMoviesFromOMDb, importMovieFromOMDb } from '../controllers/externalApiController.js';
-import authMiddleware from '../middlewares/auth.js';
+import verifyToken from '../middlewares/auth.js';
 
 const router = express.Router();
 
 router.get('/search', searchMoviesFromOMDb);
-router.post('/import', authMiddleware, importMovieFromOMDb);
+router.post('/import', verifyToken, importMovieFromOMDb);
 
 export default router;

@@ -64,6 +64,7 @@ export const importMovieFromOMDb = async (req, res) => {
       releaseDate: data.Released !== 'N/A' ? new Date(data.Released) : null,
       ageRating: data.Rated,
       imdbID: data.imdbID,
+      image: data.Poster !== 'N/A' ? data.Poster : '', 
     });
 
     await newMovie.save();

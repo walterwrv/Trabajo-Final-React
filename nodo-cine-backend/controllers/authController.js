@@ -60,3 +60,47 @@ export const getUser = async (req, res) => {
   }
 };
 
+// Obtener todos los usuarios
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, '-password'); // sin password
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener usuarios', error });
+  }
+};
+
+// Eliminar un usuario
+export const deleteUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar usuario', error });
+  }
+};
+
+// Actualizar usuario
+export const updateUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, role } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, email, role },
+      { new: true, runValidators: true }
+    ).select('-password'); // Excluir el password en la respuesta
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({ message: 'Usuario actualizado', user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar usuario', error });
+  }
+};
+
+

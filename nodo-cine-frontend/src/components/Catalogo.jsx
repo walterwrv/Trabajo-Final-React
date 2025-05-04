@@ -2,39 +2,49 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { usePerfil } from '../context/PerfilContext'; // Usamos el contexto para obtener el perfil seleccionado
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const Catalogo = () => {
   const { perfilSeleccionado,eliminarPerfil } = usePerfil(); // Obtenemos el perfil seleccionado
   const [peliculas, setPeliculas] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [paginaInput, setPaginaInput] = useState(1);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPeliculas = async () => {
+      setCargando(true);
       try {
-        const res = await axios.get('http://localhost:5000/api/movies'); // Ajustá si usás otra ruta
-        console.log('peliculas obtenidas ',res.data);
-        let filtradas = res.data;
-
-        // Si el perfil es infantil, filtrar contenido según 'ageRating'
+        const params = {
+          page: pagina,
+          limit: 8, // Cambialo si querés más o menos por página
+        };
+    
+        // Si es perfil infantil, filtramos por minAge
         if (perfilSeleccionado?.ageCategory === 'Infantil') {
-          // Filtrar películas con ageRating <= 13 para niños
-          filtradas = filtradas.filter(pelicula => parseInt(pelicula.ageRating) <= 13);
+          params.minAge = 13;
         }
-
-        setPeliculas(filtradas);
+    
+        const res = await axios.get('http://localhost:5000/api/movies/paginado', { params });
+    
+        setPeliculas(res.data.data);
+        setTotalPaginas(res.data.totalPages);
       } catch (error) {
         console.error('Error al obtener películas:', error);
       } finally {
         setCargando(false);
       }
     };
+    
 
     if (perfilSeleccionado) {
       fetchPeliculas();
     }
-  }, [perfilSeleccionado]);
+  }, [perfilSeleccionado, pagina]);
 
   const agregarAWtachlist = async (peliculaId) => {
     const token = localStorage.getItem('token');
@@ -49,10 +59,21 @@ const Catalogo = () => {
         },
       });
   
-      alert('Película agregada a la watchlist');
+      Swal.fire({
+        icon: 'success',
+        title: 'Película agregada',
+        text: `Película agregada a la watchlist`,
+      });
+      
     } catch (error) {
-      console.error('Error al agregar a la watchlist:', error.message);
-      alert('No se pudo agregar a la watchlist');
+
+      const mensaje = error.response?.data?.message || 'No se pudo agregar a la watchlist';
+      const detalle = error.response?.data?.error?.message || '';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al agregar a la watchlist',
+        html: `<strong>${mensaje}</strong>${detalle ? `<br/><small>${detalle}</small>` : ''}`,
+      });
     }
   };
 
@@ -101,6 +122,57 @@ const Catalogo = () => {
           ))}
           
         </div>
+        
+        <div className="flex flex-col md:flex-row items-center justify-center mt-6 gap-4">
+        <button
+          disabled={pagina === 1}
+          onClick={() => {
+            setPagina(pagina - 1);
+            setPaginaInput(pagina - 1);
+          }}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          ← Anterior
+        </button>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (paginaInput >= 1 && paginaInput <= totalPaginas) {
+              setPagina(paginaInput);
+            }
+          }}
+          className="flex items-center gap-2"
+        >
+          <span>Página</span>
+          <input
+            type="number"
+            value={paginaInput}
+            onChange={(e) => setPaginaInput(Number(e.target.value))}
+            min={1}
+            max={totalPaginas}
+            className="w-16 text-center border rounded"
+          />
+          <span>de {totalPaginas}</span>
+          <button
+            type="submit"
+            className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Ir
+          </button>
+        </form>
+
+        <button
+          disabled={pagina === totalPaginas}
+          onClick={() => {
+            setPagina(pagina + 1);
+            setPaginaInput(pagina + 1);
+          }}
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
+          Siguiente →
+        </button>
+      </div>
       </div>
       
     </>

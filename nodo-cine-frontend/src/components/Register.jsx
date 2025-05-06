@@ -69,7 +69,9 @@ const Register = () => {
             {...register('password')}
             className="w-full p-2 border rounded"
           />
-          
+          {errors.password && (
+            <p className="text-red-600 text-sm mt-1">{errors.password.message}</p>
+          )}
         </div>
 
         <button
